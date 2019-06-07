@@ -100,8 +100,8 @@ export default {
           action: "fa-user-md",
           title: "Staff",
           items: [
-            { title: "List of All Satff", route: "a" },
-            { title: "Add New Satff Member", route: "a" }
+            { title: "List of All Satff", route: "/staff" },
+            { title: "Add New Satff Member", route: "/staff/addStaff" }
           ]
         },
         {

@@ -1,6 +1,7 @@
 <template>
   <div class="gmap_canvas">
     <h1>Add New Hospital</h1>
+    <br>
     <v-card>
       <v-container>
         <v-layout>
@@ -8,7 +9,7 @@
             <v-text-field label="Name" v-model="name" single-line></v-text-field>
           </v-flex>
           <v-flex md4 mx-2>
-            <v-text-field label="Phone Number" v-model="phone" single-line></v-text-field>
+            <v-text-field label="Phone Number" v-model="phone" type="number" single-line></v-text-field>
           </v-flex>
           <v-flex md4 mx-2>
             <v-select
@@ -39,6 +40,7 @@
           <v-flex md6 mx-2>
             <v-text-field label="Location" v-model="locationModel" single-line></v-text-field>
             <v-btn @click="check">Check Location</v-btn>
+            <input type="file" @change="onFileSelected">
             <v-btn @click="post">Done</v-btn>
           </v-flex>
         </v-layout>
@@ -55,9 +57,11 @@ export default {
       name: "",
       phone: "",
       departments: [],
-      locationModel: "",
+      locationModel: "Cairo",
       locationSrc: "",
       states: [],
+      selectedFile: null,
+      coordinates:[30.1223159, 31.3676931]
       // default to Montreal to keep it simple
       // change this to whatever makes sense
       // center: { lat: 45.508, lng: -73.587 },
@@ -68,7 +72,8 @@ export default {
   },
 
   created() {
-    this.getDep();
+    this.getDep(), this.check();
+
     // this.geolocate();
   },
 
@@ -94,14 +99,26 @@ export default {
       });
     },
     post() {
-      let data = {
-        name: this.name,
-        phoneNumber: this.phone,
-        departments: this.departments
-      };
-      console.log(data);
-      console.log(this.states);
-      // this.$http.post('/hospital',)
+      const fd = new FormData();
+      fd.append("name", this.name);
+      fd.append("phoneNumber", this.phone);
+      fd.append("coordinates", this.coordinates[0]);
+      fd.append("coordinates", this.coordinates[1]);
+      fd.append("myImage", this.selectedFile);
+      for(let k in this.departments){
+        console.log(this.departments[k])
+        fd.append("departments", this.departments[k]._id);
+      }
+      this.$http
+        .post("hospital", fd )
+        .then(res =>{
+          console.log(res)
+          this.$router.push("/hospital");
+        } )
+        .catch(err => console.log(err));
+    },
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
     }
     // receives a place object via the autocomplete component
     // setPlace(place) {
