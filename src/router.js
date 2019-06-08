@@ -12,8 +12,15 @@ import Staff from './views/Staff/Staff.vue'
 import viewStaffs from './views/Staff/List.vue'
 import updateStaff from './views/Staff/updateStaff.vue'
 import addStaff from './views/Staff/Add.vue'
+//************** User *****************
+import User from './views/User/User.vue'
+import viewUsers from './views/User/List.vue'
+import updateUser from './views/User/updateUser.vue'
+//************** Artical *****************
+import Article from './views/Article/Artical.vue'
+import viewArticle from './views/Article/List.vue'
+import addArticle from './views/Article/Add.vue'
 
-// import Article from './views/Article/Article.vue'
 // import Room from './views/Room.vue'
 // import Users from './views/Users.vue'
 // import RoomType from './views/RoomType.vue'
@@ -47,16 +54,15 @@ export default new Router({
         { path: 'updateHospital/:idHospital', component:updateHospital , name: "updateHospital" }
       ]
     },
-    // {
-    //   path: '/articles',
-    //   name: 'articles',
-    //   component: Article,
-    //   children: [
-    //     {
-    //       path: ''
-    //     }
-    //   ]
-    // },
+    {
+      path: '/artical',
+      name: 'artical',
+      component: Article,
+      children: [
+        { path: '', component:viewArticle , name: "viewArtical" },
+        { path: 'addArtical', component:addArticle , name: "addArtical" },
+      ]
+    },
     // {
     //   path: '/rooms',
     //   name: 'rooms',
@@ -77,16 +83,6 @@ export default new Router({
     //     }
     //   ]
     // },
-    // {
-    //   path: '/users',
-    //   name: 'users',
-    //   component: Users,
-    //   children: [
-    //     {
-    //       path: ''
-    //     }
-    //   ]
-    // },
     {
       path: '/staff',
       name: 'staff',
@@ -95,6 +91,15 @@ export default new Router({
         { path: '', component:viewStaffs , name: "viewStaffs" },
         { path: 'addStaff', component:addStaff , name: "addStaff" },
         { path: 'updateStaff/:idStaff', component:updateStaff , name: "updateStaff" }
+      ]
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: User,
+      children: [
+        { path: '', component:viewUsers , name: "viewUsers" },
+        { path: 'updateUser/:idUser', component:updateUser , name: "updateUser" }
       ]
     },
     // {

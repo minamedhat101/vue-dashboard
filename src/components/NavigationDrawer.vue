@@ -84,16 +84,15 @@ export default {
           action: "fa-users",
           title: "Users",
           items: [
-            { title: "List of Users", route: "c" },
-            { title: "Add New User", route: "b" }
+            { title: "List of Users", route: "/user" },
           ]
         },
         {
           action: "fa-newspaper",
           title: "Articles",
           items: [
-            { title: "List of Articles", route: "a" },
-            { title: "Add New Articles", route: "a" }
+            { title: "List of Articles", route: "/artical" },
+            { title: "Add New Articles", route: "/artical/addArtical" }
           ]
         },
         {

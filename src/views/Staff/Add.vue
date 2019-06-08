@@ -69,7 +69,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="date"
-                  label="Picker without buttons"
+                  label="Birth Date"
                   prepend-icon="event"
                   readonly
                   v-on="on"
@@ -81,11 +81,28 @@
         </v-layout>
         <v-layout>
           <v-flex md4 mx-2>
-            <v-text-field label="Phone" v-model="phoneNumber" type="number" single-line></v-text-field>
+            <v-select
+              v-model="userType"
+              :items="userTypeItems"
+              offset-y
+              item-text="name"
+              item-value="_id"
+              label="User Type"
+              return-object
+              single-line
+            ></v-select>
           </v-flex>
           <v-flex md4 mx-2>
-            <!-- gender -->
-            
+            <v-select
+              v-model="hospital"
+              :items="hospitalItems"
+              offset-y
+              item-text="name"
+              item-value="_id"
+              label="Hospital"
+              return-object
+              single-line
+            ></v-select>
           </v-flex>
           <v-flex md4 mx-2>
             <v-select
@@ -95,9 +112,37 @@
               item-value="_id"
               return-object
               label="Departments"
+              persistent-hint
+            ></v-select>
+          </v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex md2 mx-2>
+            <v-text-field label="Street" v-model="street" single-line></v-text-field>
+          </v-flex>
+          <v-flex md2>
+            <v-text-field label="State" v-model="state" single-line></v-text-field>
+          </v-flex>
+          <v-flex md4 mx-2>
+            <v-text-field label="City" v-model="city" single-line></v-text-field>
+          </v-flex>
+          <v-flex md4 mx-2>
+            <v-select
+              v-model="qualification"
+              :items="qualificationItems"
+              label="Qualifications"
               multiple
               persistent-hint
             ></v-select>
+          </v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex md6>
+            <input type="file" @change="onFileSelected">
+          </v-flex>
+          <v-flex md6 mx-2>
+            <v-btn class="btn" @click="post">Done</v-btn>
+            <v-btn class="btn" @click="back">Back</v-btn>
           </v-flex>
         </v-layout>
       </v-container>
@@ -107,7 +152,6 @@
 
 <script>
 export default {
-  name: "GoogleMap",
   data() {
     return {
       show: false,
@@ -119,69 +163,102 @@ export default {
         { state: "Male", value: "male" },
         { state: "Female", value: "female" }
       ],
-
-      name: "",
-      phone: "",
+      userType: { name: "", _id: "" },
+      userTypeItems: [],
+      hospital: { name: "", _id: "" },
+      hospitalItems: [],
       departments: [],
-      locationModel: "Cairo",
-      locationSrc: "",
       states: [],
-      selectedFile: null,
-      coordinates: [30.1223159, 31.3676931]
-      // default to Montreal to keep it simple
-      // change this to whatever makes sense
-      // center: { lat: 45.508, lng: -73.587 },
-      // markers: [],
-      // places: [],
-      // currentPlace: null
+      qualification: [],
+      qualificationItems: ["Phd", "Master Degree"],
+      fname: "",
+      lname: "",
+      nID: "",
+      email: "",
+      password: "",
+      conpassword: "",
+      phoneNumber: "",
+      street: "",
+      city: "",
+      state: "",
+      selectedFile: null
     };
   },
-
   created() {
-    this.getDep(), this.check();
-
-    // this.geolocate();
+    this.getDep(), this.getHospital(), this.getUserType();
   },
-
   methods: {
-    check() {
-      this.locationSrc =
-        "https://maps.google.com/maps?q=" +
-        this.locationModel +
-        "&t=&z=13&ie=UTF8&iwloc=&output=embed";
-    },
     getDep() {
       this.$http.get("/department").then(res => {
         const data = res.data;
         for (let k in data) {
-          const state = {
+          let state = {
             name: data[k].name,
             _id: data[k]._id,
             description: data[k].description
           };
           this.states.push(state);
         }
-        console.log(this.states);
+      });
+    },
+    getHospital() {
+      this.$http.get("/hospital").then(res => {
+        const data = res.data;
+        for (let k in data) {
+          let state = {
+            name: data[k].name,
+            _id: data[k]._id
+          };
+          this.hospitalItems.push(state);
+        }
+      });
+    },
+    getUserType() {
+      this.$http.get("/userType").then(res => {
+        const data = res.data;
+        for (let k in data) {
+          let state = {
+            name: data[k].name,
+            _id: data[k]._id
+          };
+          this.userTypeItems.push(state);
+        }
       });
     },
     post() {
       const fd = new FormData();
-      fd.append("name", this.name);
-      fd.append("phoneNumber", this.phone);
-      fd.append("coordinates", this.coordinates[0]);
-      fd.append("coordinates", this.coordinates[1]);
       fd.append("myImage", this.selectedFile);
-      for (let k in this.departments) {
-        console.log(this.departments[k]);
-        fd.append("departments", this.departments[k]._id);
+      fd.append("street", this.street);
+      fd.append("city", this.city);
+      fd.append("state", this.state);
+      for (let k in this.qualification) {
+        fd.append("qulaifications", this.qualification[k]);
       }
-      this.$http
-        .post("hospital", fd)
-        .then(res => {
-          console.log(res);
-          this.$router.push("/hospital");
-        })
-        .catch(err => console.log(err));
+      fd.append("email", this.email);
+      fd.append("password", this.password);
+      fd.append("gender", this.gender.value);
+      fd.append("fristName", this.fname);
+      fd.append("lastName", this.lname);
+      fd.append("dateOfBirth", "1997-03-01T11:30:33.000Z");
+      fd.append("phoneNumber", this.phoneNumber);
+      fd.append("nationalID", this.nID);
+      fd.append("userType", this.userType._id);
+      fd.append("hospital", this.hospital._id);
+      fd.append("department", this.departments._id);
+      if (this.password == this.conpassword) {
+        this.$http
+          .post("employee/signup", fd)
+          .then(res => {
+            console.log(res);
+            this.$router.push("/staff");
+          })
+          .catch(err => console.log(err));
+      } else {
+        console.log("El password ya3m");
+      }
+    },
+    back() {
+      this.$router.push("/staff");
     },
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
@@ -189,3 +266,10 @@ export default {
   }
 };
 </script>
+<style  scoped>
+.btn {
+  padding: 0 50px;
+  text-align: center;
+  float: right;
+}
+</style>

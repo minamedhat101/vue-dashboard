@@ -53,7 +53,7 @@
               </v-btn>
             </v-flex>
             <v-flex xs3 md3>
-              <popup :id="x._id" @click="ss(x._id)"/>
+              <popup :id="x._id"/>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -76,21 +76,18 @@ export default {
     };
   },
   methods: {
-    ss(s) {
-      console.log(s);
-    },
     //For View Profile
     getLi(x) {
       // this.$router.push(`/clients/view/${x.nationalID}`);
     },
     //For Edit(Update) Component
     getEdit(x) {
-      this.$router.push(`/clients/updateUser/${x.nationalID}`);
+      this.$router.push(`/staff/updateStaff/${x._id}`);
     },
     //For Delete This User
     getDelete(x, i) {
-      this.$ax
-        .delete(`/user/delete/${x.nationalID}`)
+      this.$http
+        .delete(`/employee/${x._id}`)
         .then(res => {
           console.log(res);
         })

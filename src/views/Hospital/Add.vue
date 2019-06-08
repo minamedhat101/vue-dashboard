@@ -51,7 +51,6 @@
 
 <script>
 export default {
-  name: "GoogleMap",
   data() {
     return {
       name: "",
