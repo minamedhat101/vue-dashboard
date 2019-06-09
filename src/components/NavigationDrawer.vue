@@ -13,8 +13,12 @@
               </v-avatar>
             </v-flex>
             <v-flex class="mt-5 pa-2" xs6>
-              <h3>Mina Medhat</h3>
-              <h3 class="font-weight-light">Doctor</h3>
+              <h3>
+                <span style="text-transform: capitalize">{{getName}}</span>
+              </h3>
+              <h3 class="font-weight-light">
+                <span style="text-transform: capitalize">{{getStaffType}}</span>
+              </h3>
             </v-flex>
           </v-layout>
         </v-card>
@@ -57,6 +61,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -83,9 +88,7 @@ export default {
         {
           action: "fa-users",
           title: "Users",
-          items: [
-            { title: "List of Users", route: "/user" },
-          ]
+          items: [{ title: "List of Users", route: "/user" }]
         },
         {
           action: "fa-newspaper",
@@ -124,9 +127,9 @@ export default {
           action: "fa-user-injured",
           title: "Patients",
           items: [
-            { title: "Medical History of a Patient", route: "a" },
-            { title: "Add New Patient", route: "a" },
-            { title: "Push a new info. for a Patient", route: "a" }
+            { title: "Medical History of a Patient", route: "/patient/medicalHistory" },
+            { title: "Add New Patient", route: "/patient/addPatient" },
+            { title: "Add New Node", route: "/patient/addNewNode" }
           ]
         }
       ],
@@ -136,6 +139,12 @@ export default {
   },
   props: {
     draw: Boolean
+  },
+  computed: {
+    ...mapGetters({
+      getStaffType: "getStaffType",
+      getName: "getName"
+    })
   }
 };
 </script>

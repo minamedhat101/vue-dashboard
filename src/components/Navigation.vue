@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-items v-if="showNav" class="hidden-sm-and-down">
         <v-btn flat>
-          <span class="pr-1">Name</span>
+          <span style="text-transform: capitalize" class="pr-1">{{getName}}</span>
           <v-avatar size="30">
             <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
           </v-avatar>
@@ -40,7 +40,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      showNav: "showNavBar"
+      showNav: "showNavBar",
+      getName: "getName"
     })
   },methods: {
     signOut(){

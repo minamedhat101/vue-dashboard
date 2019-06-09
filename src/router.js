@@ -20,13 +20,20 @@ import updateUser from './views/User/updateUser.vue'
 import Article from './views/Article/Artical.vue'
 import viewArticle from './views/Article/List.vue'
 import addArticle from './views/Article/Add.vue'
+//************** Patient *****************
+import Patient from './views/Patient/Patient.vue'
+import viewPatient from './views/Patient/List.vue'
+import addPatient from './views/Patient/Add.vue'
+import updatePatient from './views/Patient/Update.vue'
+import MedicalHistory from './views/Patient/MedicalHistory.vue'
+import AddNewNode from './views/Patient/addNewNode.vue'
+import ViewBlocks from './views/Patient/viewBlocks.vue'
 
 // import Room from './views/Room.vue'
 // import Users from './views/Users.vue'
 // import RoomType from './views/RoomType.vue'
 // import Complain from './views/Complain.vue'
 // import Appointment from './views/Appointment.vue'
-// import Patient from './views/Patient.vue'
 
 Vue.use(Router)
 
@@ -61,6 +68,19 @@ export default new Router({
       children: [
         { path: '', component:viewArticle , name: "viewArtical" },
         { path: 'addArtical', component:addArticle , name: "addArtical" },
+      ]
+    },
+    {
+      path: '/patient',
+      name: 'patient',
+      component: Patient,
+      children: [
+        { path: '', component:viewPatient , name: "viewPatient" },
+        { path: 'addPatient', component:addPatient , name: "addPatient" },
+        { path: 'updatePatient/:idPatient', component:updatePatient , name: "updatePatient" },
+        { path: 'medicalHistory', component:MedicalHistory , name: "medicalHistory" },
+        { path: 'addNewNode', component:AddNewNode , name: "addNewNode" },
+        { path: 'viewBlocks/:idViewBlock', component:ViewBlocks , name: "viewBlocks" },
       ]
     },
     // {

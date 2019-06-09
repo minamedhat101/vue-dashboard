@@ -86,8 +86,11 @@ export default {
           res => {
             // this.loading = false;
             // this.loader = null;
+            
             this.$router.push(`/hospital`);
             this.$store.dispatch("changeNavBarac")
+            this.$store.dispatch("getProfile",res.data.token)
+            
             // this.tokenn = res.data.token
             // vv(res.data.token)
           },
